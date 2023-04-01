@@ -1,18 +1,18 @@
 {
-    "name": "smiftakhairul/sslcommerz",
+    "name": "travela/sslcommerz",
     "description": "SSLCommerz Payment Gateway Package for Laravel.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "S M Iftakhairul",
-            "email": "s.m.iftakhairul@gmail.com"
+            "name": "Hashemi Rafsan",
+            "email": "rafsanhashemi@gmail.com"
         }
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.3|^8.0",
-        "laravel/framework": "^8.12",
+        "php": ">=8.2",
+        "laravel/framework": "^10.0",
         "guzzlehttp/guzzle": "^7.0.1"
     },
     "autoload": {

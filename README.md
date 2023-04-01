@@ -1,17 +1,21 @@
 # SSLCommerz
+
 [SSLCommerz](https://www.sslcommerz.com/) is the first payment gateway in Bangladesh opening doors for merchants to receive payments on the internet via their online stores.
 
 Official documentation [here](https://developer.sslcommerz.com/).
 
 ## Installation
+
 ```bash
-$ composer require smiftakhairul/sslcommerz
+$ composer require travela/sslcommerz
 ```
 
 ## Vendor
+
 ```bash
 $ php artisan vendor:publish --provider="SSLCZ\SSLCommerz\SSLCommerzServiceProvider"
 ```
+
 A file `sslcommerz.php` will be added to `config` directory after running above command. We need to setup our configuration to `.env` file as follows:
 
 ```bash
@@ -19,10 +23,13 @@ STORE_ID="your-store-id"
 STORE_PASSWORD="your-store-password"
 IS_PRODUCTION=false
 ```
+
 For deveopment mode we need to set `IS_PRODUCTION=false`, and for production mode `IS_PRODUCTION=true`. Please go through the official [docs](https://developer.sslcommerz.com/) of SSLCommerz for further information.
 
 ## Usage
-#### *Initiate a payment*
+
+#### _Initiate a payment_
+
 ```php
 $sslcommerz = new SSLCommerz();
 $sslcommerz->setPaymentDisplayType('hosted'); // enum('hosted', 'checkout')
@@ -79,7 +86,8 @@ $sslcommerz->setConvenienceFee('50');
 
 $response = $sslcommerz->initPayment($sslcommerz);
 ```
-#### *Set store information dynamically*
+
+#### _Set store information dynamically_
 
 ```php
 $sslcommerz = new SSLCommerz([
@@ -89,10 +97,12 @@ $sslcommerz = new SSLCommerz([
 ]);
 ```
 
-#### *Response*
+#### _Response_
+
 > You will get a response after initiating a payment by which you can deal with. You can see a sample response format in the official documentation.
 
 ### Hosted Payment Integration
+
 ```php
 // Controller
 $sslcommerz = new SSLCommerz();
@@ -104,16 +114,22 @@ return redirect($response['GatewayPageURL']); // redirect to gateway page url
 ```
 
 ### Easy Checkout Integration
+
 ```javascript
 // View(js) - Step 1
 (function (window, document) {
-    var loader = function () {
-        var script = document.createElement("script"), tag = document.getElementsByTagName("script")[0];
-        script.src = "{{ 'Sandbox or Live(Production) Script' }}" + Math.random().toString(36).substring(7);
-        tag.parentNode.insertBefore(script, tag);
-    };
+  var loader = function () {
+    var script = document.createElement("script"),
+      tag = document.getElementsByTagName("script")[0];
+    script.src =
+      "{{ 'Sandbox or Live(Production) Script' }}" +
+      Math.random().toString(36).substring(7);
+    tag.parentNode.insertBefore(script, tag);
+  };
 
-    window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+  window.addEventListener
+    ? window.addEventListener("load", loader, false)
+    : window.attachEvent("onload", loader);
 })(window, document);
 
 /*
@@ -124,11 +140,15 @@ Live or Production Script URL: https://seamless-epay.sslcommerz.com/embed.min.js
 
 ```html
 <!-- View(js) - Step 2 -->
-<button class="your-button-class" id="sslczPayBtn"
-        token="if you have any token validation"
-        postdata="your javascript arrays or objects which requires in backend"
-        order="If you already have the transaction generated for current order"
-        endpoint="{{ 'your-easy-checkout-pay-url' }}"> Pay Now
+<button
+  class="your-button-class"
+  id="sslczPayBtn"
+  token="if you have any token validation"
+  postdata="your javascript arrays or objects which requires in backend"
+  order="If you already have the transaction generated for current order"
+  endpoint="{{ 'your-easy-checkout-pay-url' }}"
+>
+  Pay Now
 </button>
 ```
 
@@ -143,7 +163,9 @@ echo $sslcommerz->formatCheckoutResponse($response); // show easycheckout pay po
 ```
 
 ### Disable CSRF Protection
-Disable `CSRF` protection for the following URL's. 
+
+Disable `CSRF` protection for the following URL's.
+
 - `init-payment-via-ajax` url
 - `success` url
 - `fail` url
@@ -151,18 +173,20 @@ Disable `CSRF` protection for the following URL's.
 - `ipn` url
 
 Disable them from `VerifyCsrfToken` middleware.
+
 ```php
 // VerifyCsrfToken.php
 protected $except = [
-    '/init-payment-via-ajax', 
-    '/success', 
-    '/cancel', 
-    '/fail', 
+    '/init-payment-via-ajax',
+    '/success',
+    '/cancel',
+    '/fail',
     '/ipn'
 ];
 ```
 
 ### Order Validation
+
 ```php
 $sslcommerz = new SSLCommerz();
 $response = $sslcommerz->orderValidate([
@@ -175,6 +199,7 @@ $response = $sslcommerz->orderValidate([
 ```
 
 ### Transaction Query
+
 ```php
 $sslcommerz = new SSLCommerz();
 
@@ -193,6 +218,7 @@ $response = $sslcommerz->transactionQueryBySessionId([
 ```
 
 ### Refund
+
 ```php
 $sslcommerz = new SSLCommerz();
 
@@ -215,24 +241,29 @@ $response = $sslcommerz->refundStatus([
 ```
 
 ## Available Env's & API's
-***Environments:*** `getApiEnvironment()`
+
+**_Environments:_** `getApiEnvironment()`
+
 - **sandbox** (`IS_PRODUCTION` false)
 - **production** (`IS_PRODUCTION` true)
 
-***Domains:*** `getApiDomain()`
+**_Domains:_** `getApiDomain()`
+
 - **sandbox** (https://sandbox.sslcommerz.com)
 - **production** (https://securepay.sslcommerz.com)
 
-***APIs:***
+**_APIs:_**
+
 - `getApiUrl()` ([api_domain]/gwprocess/v4/api.php)
 - `getOrderValidateApiUrl()` ([api_domain]/validator/api/validationserverAPI.php)
 - `getTransactionStatusApiUrl()` ([api_domain]/validator/api/merchantTransIDvalidationAPI.php)
 - `getRefundPaymentApiUrl()` ([api_domain]/validator/api/merchantTransIDvalidationAPI.php)
 - `getRefundStatusApiUrl()` ([api_domain]/validator/api/merchantTransIDvalidationAPI.php)
 
-
 ## Available Methods
+
 ##### Environment & domain related configuration:
+
 <table>
     <thead>
     <tr>
@@ -273,6 +304,7 @@ $response = $sslcommerz->refundStatus([
 </table>
 
 ##### API url configuration:
+
 <table>
     <thead>
     <tr>
@@ -336,6 +368,7 @@ $response = $sslcommerz->refundStatus([
 </table>
 
 #### Set information as a compact:
+
 <table>
     <thead>
     <tr>
@@ -574,6 +607,7 @@ $response = $sslcommerz->refundStatus([
 </table>
 
 ##### Other getters and setters:
+
 <table>
     <thead>
     <tr>
@@ -1186,8 +1220,8 @@ $response = $sslcommerz->refundStatus([
     </tbody>
 </table>
 
-
 `*` = **Required** and `**` = **Dependently Required**.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
